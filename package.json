@@ -14,14 +14,10 @@
     "url": "https://github.com/Poicitaco/giftphanh/issues"
   },
   "keywords": [
-    "claude-code",
-    "website-clone",
-    "reverse-engineering",
+    "gift",
+    "collaborative-letters",
     "nextjs",
-    "ai",
-    "template",
-    "tailwindcss",
-    "shadcn-ui"
+    "supabase"
   ],
   "engines": {
     "node": ">=24"

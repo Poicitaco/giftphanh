@@ -2,6 +2,8 @@
 
 A private collaborative jar of letters for someone special, inspired by the paper-star experience of A Little Jar of Stars.
 
+Product direction and implementation phases are tracked in [docs/PRODUCT_ROADMAP.md](docs/PRODUCT_ROADMAP.md).
+
 ## Main flows
 
 - Admin signs in with Google, creates one jar for one recipient, moderates letters, seals and opens the jar.
