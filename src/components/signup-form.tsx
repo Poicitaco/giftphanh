@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleAuthButton } from "@/components/google-auth-button";
+import { AmbientStarField } from "@/components/ambient-star-field";
 
 export function SignupForm() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ export function SignupForm() {
 
   return (
     <main className="auth-page scene">
+      <AmbientStarField />
       <Link className="composer-back" href="/"><span aria-hidden="true">←</span> back</Link>
       <section className="auth-content">
         <h1>sign up</h1>

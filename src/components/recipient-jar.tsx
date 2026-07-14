@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import { openMemory, type OpenedMemory } from "@/app/j/[slug]/actions";
+import { AmbientStarField } from "@/components/ambient-star-field";
 
 export type Star = { id: string; color: string; rotation: number; opened: boolean };
-
-const ambientStars = [
-  [7, 18, 22], [16, 70, 34], [28, 12, 18], [39, 82, 26], [51, 20, 16],
-  [63, 74, 24], [75, 10, 30], [86, 58, 18], [94, 28, 27], [91, 86, 16],
-];
 
 export function RecipientJar({ slug, recipientName, stars }: { slug: string; recipientName: string; stars: Star[] }) {
   const [letter, setLetter] = useState<OpenedMemory | null>(null);
@@ -26,11 +22,7 @@ export function RecipientJar({ slug, recipientName, stars }: { slug: string; rec
 
   return (
     <main className="recipient-jar-page scene">
-      <div className="recipient-ambient-stars" aria-hidden="true">
-        {ambientStars.map(([left, top, size], index) => (
-          <img key={`${left}-${top}`} src={`/assets/star-${index % 2 ? "lavender" : "sky"}.png`} alt="" style={{ left: `${left}%`, top: `${top}%`, width: `${size}px`, animationDelay: `${index * -0.35}s` }} />
-        ))}
-      </div>
+      <AmbientStarField full />
 
       <header><p>made with love for</p><h1>{recipientName}</h1><p>{stars.length ? "chạm vào từng ngôi sao để mở một lá thư." : "chiếc lọ đã mở nhưng chưa có thư nào được duyệt."}</p></header>
 

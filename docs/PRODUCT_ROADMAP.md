@@ -27,7 +27,7 @@ Giftphanh là một website quà tặng cộng tác: một người tạo lọ, 
 - Chuyển các trang demo `localStorage` như `/add`, `/memories`, `/welcome` về luồng sản phẩm thật.
 - Đặt lối vào đăng nhập và đăng ký tại trang chủ; nút tạo lọ luôn yêu cầu đăng nhập.
 
-### 2. Hệ chuyển động dùng chung
+### 2. Hệ chuyển động dùng chung — hoàn thành
 
 - Tạo trường sao rơi liên tục với nhiều kích thước, tốc độ và độ sâu.
 - Cho lọ và tờ giấy phía sau chuyển động nhẹ, lệch nhịp.

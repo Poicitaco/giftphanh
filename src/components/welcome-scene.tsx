@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AmbientStarField } from "@/components/ambient-star-field";
 
 const colors = ["mint", "sky", "lavender", "yellow", "peach", "pink", "coral", "sage"];
 const stars = Array.from({ length: 56 }, (_, index) => ({
@@ -13,6 +14,8 @@ const stars = Array.from({ length: 56 }, (_, index) => ({
 export function WelcomeScene({ authenticated }: { authenticated: boolean }) {
   return (
     <main className="gift-landing scene">
+      <AmbientStarField full />
+
       <nav className="landing-account" aria-label="Tài khoản">
         {authenticated ? (
           <Link className="landing-account-primary" href="/admin">lọ của tôi</Link>
