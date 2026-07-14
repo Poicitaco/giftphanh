@@ -1,5 +1,5 @@
-import { MemoryJar } from "@/components/memory-jar";
+import { WelcomeScene } from "@/components/welcome-scene";
 
 export default function Home() {
-  return <MemoryJar />;
+  return <WelcomeScene />;
 }
