@@ -10,9 +10,20 @@ const stars = Array.from({ length: 56 }, (_, index) => ({
   rotation: -24 + ((index * 29) % 49),
 }));
 
-export function WelcomeScene() {
+export function WelcomeScene({ authenticated }: { authenticated: boolean }) {
   return (
     <main className="gift-landing scene">
+      <nav className="landing-account" aria-label="Tài khoản">
+        {authenticated ? (
+          <Link className="landing-account-primary" href="/admin">lọ của tôi</Link>
+        ) : (
+          <>
+            <Link href="/login">đăng nhập</Link>
+            <Link className="landing-account-primary" href="/sign-up">đăng ký</Link>
+          </>
+        )}
+      </nav>
+
       <div className="landing-star-pile" aria-hidden="true">
         {stars.map((star, index) => (
           <img

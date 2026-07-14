@@ -20,7 +20,7 @@ Giftphanh là một website quà tặng cộng tác: một người tạo lọ, 
 
 ## Các giai đoạn thực hiện
 
-### 1. Dọn nền dự án và luồng cũ
+### 1. Dọn nền dự án và luồng cũ — hoàn thành
 
 - Xóa skill/template clone bị lẫn vào repo.
 - Giữ lại ảnh tham chiếu cần cho việc đối chiếu giao diện.
