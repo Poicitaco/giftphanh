@@ -9,16 +9,23 @@ export type FormState = { error: string; success?: string; memoryId?: string };
 export type EditState = FormState & { memory?: EditableMemory };
 export type EditableMemory = {
   id: string; sender_name: string | null; is_anonymous: boolean; content: string;
-  visibility: string; color: string; moderation_status: string;
+  visibility: string; color: string; font_key: LetterFont; moderation_status: string;
 };
 export type OpenedMemory = {
   id: string; content: string; sender_name: string | null; is_anonymous: boolean;
-  color: string; created_at: string;
+  color: string; font_key: LetterFont; created_at: string;
 };
+
+export type LetterFont = "handwritten" | "serif" | "typewriter";
 
 const read = (data: FormData, name: string) => String(data.get(name) ?? "").trim();
 const cookieName = (kind: "contributor" | "recipient", slug: string) => `jar-${kind}-${slug}`;
 const token = () => `${crypto.randomUUID()}${crypto.randomUUID()}`;
+const fontKeys: LetterFont[] = ["handwritten", "serif", "typewriter"];
+const readFont = (data: FormData): LetterFont | null => {
+  const value = read(data, "fontKey") as LetterFont;
+  return fontKeys.includes(value) ? value : null;
+};
 
 export async function submitLetter(_: FormState, data: FormData): Promise<FormState> {
   const slug = read(data, "slug");
@@ -28,10 +35,12 @@ export async function submitLetter(_: FormState, data: FormData): Promise<FormSt
   const isAnonymous = data.get("isAnonymous") === "on";
   const visibility = data.get("visibility") === "contributors" ? "contributors" : "private";
   const color = read(data, "color") || "sky";
-  if (!/^[a-z0-9][a-z0-9-]{2,63}$/.test(slug)) return { error: "invalid jar link." };
-  if (!content || content.length > 10000) return { error: "write between 1 and 10,000 characters." };
-  if (!isAnonymous && (!senderName || senderName.length > 100)) return { error: "your name is required." };
-  if (editPasscode.length < 6 || editPasscode.length > 72) return { error: "edit code must contain 6 to 72 characters." };
+  const fontKey = readFont(data);
+  if (!/^[a-z0-9][a-z0-9-]{2,63}$/.test(slug)) return { error: "Đường dẫn chiếc lọ không hợp lệ." };
+  if (!content || content.length > 10000) return { error: "Lá thư cần dài từ 1 đến 10.000 ký tự." };
+  if (!isAnonymous && (!senderName || senderName.length > 100)) return { error: "Bạn chưa ký tên cho lá thư." };
+  if (editPasscode.length < 6 || editPasscode.length > 72) return { error: "Mật mã sửa thư cần từ 6 đến 72 ký tự." };
+  if (!fontKey) return { error: "Kiểu chữ bạn chọn không hợp lệ." };
 
   const store = await cookies();
   const name = cookieName("contributor", slug);
@@ -40,12 +49,12 @@ export async function submitLetter(_: FormState, data: FormData): Promise<FormSt
   const { data: memoryId, error } = await supabase.rpc("submit_memory", {
     p_slug: slug, p_sender_name: senderName || null, p_is_anonymous: isAnonymous,
     p_content: content, p_visibility: visibility, p_edit_passcode: editPasscode,
-    p_contributor_token: contributorToken, p_color: color,
+    p_contributor_token: contributorToken, p_color: color, p_font_key: fontKey,
     p_rotation: Math.floor(Math.random() * 13) - 6,
   });
-  if (error || !memoryId) return { error: error?.message || "the letter could not be saved." };
+  if (error || !memoryId) return { error: error?.message || "Chưa thể thả lá thư vào lọ. Hãy thử lại nhé." };
   store.set(name, contributorToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: `/j/${slug}`, maxAge: 60 * 60 * 24 * 365 });
-  return { error: "", success: "Your letter is safely folded into a star. Save the edit link and your private edit code.", memoryId };
+  return { error: "", success: "Lá thư đã được gấp an toàn. Hãy giữ lại đường dẫn sửa thư và mật mã riêng của bạn.", memoryId };
 }
 
 export async function loadOwnLetter(_: EditState, data: FormData): Promise<EditState> {
@@ -55,7 +64,7 @@ export async function loadOwnLetter(_: EditState, data: FormData): Promise<EditS
   const supabase = await createClient();
   const { data: rows, error } = await supabase.rpc("get_own_memory", { p_slug: slug, p_memory_id: memoryId, p_edit_passcode: passcode });
   const memory = rows?.[0] as EditableMemory | undefined;
-  if (error || !memory) return { error: "wrong edit code or letter not found." };
+  if (error || !memory) return { error: "Mật mã chưa đúng hoặc lá thư không còn tồn tại." };
   return { error: "", memory };
 }
 
@@ -68,16 +77,18 @@ export async function updateOwnLetter(_: EditState, data: FormData): Promise<Edi
   const isAnonymous = data.get("isAnonymous") === "on";
   const visibility = data.get("visibility") === "contributors" ? "contributors" : "private";
   const color = read(data, "color") || "sky";
-  if (!content || content.length > 10000) return { error: "write between 1 and 10,000 characters." };
+  const fontKey = readFont(data);
+  if (!content || content.length > 10000) return { error: "Lá thư cần dài từ 1 đến 10.000 ký tự." };
+  if (!fontKey) return { error: "Kiểu chữ bạn chọn không hợp lệ." };
   const supabase = await createClient();
   const { data: updated, error } = await supabase.rpc("update_own_memory", {
     p_slug: slug, p_memory_id: memoryId, p_edit_passcode: editPasscode,
     p_sender_name: senderName || null, p_is_anonymous: isAnonymous,
-    p_content: content, p_visibility: visibility, p_color: color,
+    p_content: content, p_visibility: visibility, p_color: color, p_font_key: fontKey,
   });
-  if (error || !updated) return { error: "could not update the letter. Check your code or ask the jar owner." };
+  if (error || !updated) return { error: "Chưa thể sửa lá thư. Kiểm tra mật mã hoặc nhắn chủ chiếc lọ nhé." };
   revalidatePath(`/j/${slug}`);
-  return { error: "", success: "Letter updated. It is waiting for the owner to approve it again." };
+  return { error: "", success: "Đã gấp lại lá thư. Thư đang chờ chủ lọ duyệt lần nữa." };
 }
 
 export async function unlockRecipient(_: FormState, data: FormData): Promise<FormState> {

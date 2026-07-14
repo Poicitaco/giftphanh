@@ -56,7 +56,7 @@ export function RecipientJar({ slug, recipientName, stars }: { slug: string; rec
           <article className={`reveal-sheet memory-card-${letter.color}`}>
             <span className="reveal-tape" />
             <button className="reveal-close" onClick={() => setLetter(null)} aria-label="Đóng">×</button>
-            <p className="reveal-text">“{letter.content}”</p>
+            <p className={`reveal-text letter-font-${letter.font_key}`}>“{letter.content}”</p>
             <p className="letter-signature">— {letter.is_anonymous ? "ẩn danh" : letter.sender_name}</p>
             <time className="reveal-date">{new Date(letter.created_at).toLocaleDateString("vi-VN")}</time>
             <div className="reveal-actions"><button onClick={() => setLetter(null)}>gấp lại vào lọ</button></div>
