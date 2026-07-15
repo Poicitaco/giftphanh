@@ -34,7 +34,7 @@ Giftphanh là một website quà tặng cộng tác: một người tạo lọ, 
 - Dùng hiệu ứng mạnh ở trang chủ và trang người nhận; dùng bản nhẹ ở biểu mẫu; hạn chế ở trang quản trị.
 - Chỉ dùng CSS `transform` và `opacity`, đồng thời tôn trọng `prefers-reduced-motion`.
 
-### 3. Trình soạn thư cho người gửi — hoàn thành ở mã nguồn, chờ duyệt migration
+### 3. Trình soạn thư cho người gửi — hoàn thành
 
 - Thiết kế lại tờ giấy, khoảng cách, độ tương phản và mobile.
 - Việt hóa nội dung theo giọng vui vẻ, thân mật.
@@ -43,7 +43,7 @@ Giftphanh là một website quà tặng cộng tác: một người tạo lọ, 
 - Giữ tên người gửi, tùy chọn ẩn danh, màu sao, quyền chia sẻ và mật mã sửa thư.
 - Bổ sung một ảnh riêng tư nếu luồng lưu trữ và quyền truy cập được hoàn thiện.
 
-Đã hoàn thiện form tờ thư, tiếng Việt vui, mobile, bộ đếm 10.000 ký tự và ba kiểu chữ có xem trước. Ảnh riêng tư được tách sang bước Storage để thiết kế đúng quyền truy cập. Migration `202607140004_memory_fonts.sql` đã được chuẩn bị nhưng chưa áp dụng lên Supabase thật.
+Đã hoàn thiện form tờ thư, tiếng Việt vui, mobile, bộ đếm 10.000 ký tự và ba kiểu chữ có xem trước. Ảnh riêng tư được tách sang bước Storage để thiết kế đúng quyền truy cập. Migration `202607140004_memory_fonts.sql` đã được áp dụng và kiểm tra trên Supabase ngày 15/07/2026.
 
 ### 4. Trải nghiệm người nhận
 
