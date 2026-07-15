@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ContributorForm } from "@/components/contributor-form";
 import { AmbientStarField } from "@/components/ambient-star-field";
+import { getSiteCopy } from "@/lib/site-copy-server";
 
 export const dynamic = "force-dynamic";
 export default async function ContributePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -11,5 +12,6 @@ export default async function ContributePage({ params }: { params: Promise<{ slu
   if (error) console.error("get_public_jar failed", { code: error.code, message: error.message });
   const jar = data?.[0]; if (!jar) notFound();
   const accepting = ["draft", "collecting"].includes(jar.status);
-  return <main className="flow-page scene"><AmbientStarField /><Link className="composer-back" href="/">← về trang chủ</Link><header className="flow-heading"><p>bạn đang viết cho</p><h1>{jar.recipient_name}</h1><h2>{jar.title}</h2>{jar.intro && <p>{jar.intro}</p>}</header>{accepting ? <ContributorForm slug={slug} galleryEnabled={jar.allow_contributor_gallery} /> : <section className="flow-paper"><h2>Chiếc lọ đã ngừng nhận thư</h2><p>Chủ lọ đã niêm phong món quà dành cho {jar.recipient_name} rồi.</p></section>}</main>;
+  const copy = await getSiteCopy();
+  return <main className="flow-page scene"><AmbientStarField /><Link className="composer-back" href="/">← {copy.contribute_back}</Link><header className="flow-heading"><p>{copy.contribute_writing_for}</p><h1>{jar.recipient_name}</h1><h2>{jar.title}</h2>{jar.intro && <p>{jar.intro}</p>}</header>{accepting ? <ContributorForm slug={slug} galleryEnabled={jar.allow_contributor_gallery} /> : <section className="flow-paper"><h2>{copy.contribute_closed_title}</h2><p>{copy.contribute_closed_body}</p></section>}</main>;
 }

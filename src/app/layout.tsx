@@ -6,6 +6,8 @@ import {
   Waiting_for_the_Sunrise,
 } from "next/font/google";
 import "./globals.css";
+import { SiteCopyProvider } from "@/components/site-copy-provider";
+import { getSiteCopy } from "@/lib/site-copy-server";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -38,11 +40,12 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const copy = await getSiteCopy();
   return (
     <html lang="vi">
       <body className={`${cormorant.variable} ${spaceMono.variable} ${sunrise.variable} ${mali.variable}`}>
-        {children}
+        <SiteCopyProvider copy={copy}>{children}</SiteCopyProvider>
       </body>
     </html>
   );

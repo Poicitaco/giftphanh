@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { AmbientStarField } from "@/components/ambient-star-field";
+import { useSiteCopy } from "@/components/site-copy-provider";
 
 const colors = ["mint", "sky", "lavender", "yellow", "peach", "pink", "coral", "sage"];
 const stars = Array.from({ length: 56 }, (_, index) => ({
@@ -12,17 +15,18 @@ const stars = Array.from({ length: 56 }, (_, index) => ({
 }));
 
 export function WelcomeScene({ authenticated }: { authenticated: boolean }) {
+  const copy = useSiteCopy();
   return (
     <main className="gift-landing scene">
       <AmbientStarField full />
 
-      <nav className="landing-account" aria-label="Tài khoản">
+      <nav className="landing-account" aria-label={copy.home_account_label}>
         {authenticated ? (
-          <Link className="landing-account-primary" href="/admin">lọ của tôi</Link>
+          <Link className="landing-account-primary" href="/admin">{copy.home_my_jars}</Link>
         ) : (
           <>
-            <Link href="/login">đăng nhập</Link>
-            <Link className="landing-account-primary" href="/sign-up">đăng ký</Link>
+            <Link href="/login">{copy.home_login}</Link>
+            <Link className="landing-account-primary" href="/sign-up">{copy.home_signup}</Link>
           </>
         )}
       </nav>
@@ -46,21 +50,21 @@ export function WelcomeScene({ authenticated }: { authenticated: boolean }) {
       </div>
 
       <section className="landing-content">
-        <p className="landing-kicker">một món quà từ rất nhiều người thương</p>
-        <h1><span>a little jar</span><strong>of stars</strong></h1>
-        <p className="landing-copy">Mỗi người gấp một lá thư thành ngôi sao.<br />Đến ngày đặc biệt, cả chiếc lọ sẽ mở ra cho một người.</p>
+        <p className="landing-kicker">{copy.home_kicker}</p>
+        <h1><span>{copy.home_title_first}</span><strong>{copy.home_title_second}</strong></h1>
+        <p className="landing-copy">{copy.home_intro_first}<br />{copy.home_intro_second}</p>
         <div className="landing-actions">
-          <Link className="paper-button landing-primary" href="/create">★ tạo lọ quà tặng</Link>
-          <a className="landing-secondary" href="#recipient-help">tôi nhận được một liên kết</a>
+          <Link className="paper-button landing-primary" href="/create">{copy.home_create}</Link>
+          <a className="landing-secondary" href="#recipient-help">{copy.home_recipient_help_link}</a>
         </div>
       </section>
 
       <section className="landing-help" id="recipient-help" role="dialog" aria-labelledby="recipient-help-title">
         <article>
-          <a className="landing-help-close" href="#" aria-label="Đóng">×</a>
-          <h2 id="recipient-help-title">Bạn là người nhận?</h2>
-          <p>Hãy mở đúng liên kết người tặng đã gửi riêng cho bạn, rồi nhập mật mã họ cung cấp. Chỉ có mật mã thôi thì chưa đủ — hãy xin thêm liên kết chiếc lọ.</p>
-          <a className="paper-button" href="#">mình hiểu rồi</a>
+          <a className="landing-help-close" href="#" aria-label={copy.home_help_close}>×</a>
+          <h2 id="recipient-help-title">{copy.home_help_title}</h2>
+          <p>{copy.home_help_body}</p>
+          <a className="paper-button" href="#">{copy.home_help_confirm}</a>
         </article>
       </section>
     </main>

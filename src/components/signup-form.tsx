@@ -5,8 +5,10 @@ import { FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleAuthButton } from "@/components/google-auth-button";
 import { AmbientStarField } from "@/components/ambient-star-field";
+import { useSiteCopy } from "@/components/site-copy-provider";
 
 export function SignupForm() {
+  const copy = useSiteCopy();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sent, setSent] = useState(false);
@@ -27,20 +29,20 @@ export function SignupForm() {
   return (
     <main className="auth-page scene">
       <AmbientStarField />
-      <Link className="composer-back" href="/"><span aria-hidden="true">←</span> back</Link>
+      <Link className="composer-back" href="/"><span aria-hidden="true">←</span> {copy.auth_back}</Link>
       <section className="auth-content">
-        <h1>sign up</h1>
-        <p>create an admin account to keep your jars safe.</p>
+        <h1>{copy.signup_title}</h1>
+        <p>{copy.signup_intro}</p>
         <form className="auth-paper" onSubmit={submit}>
-          <label className="sr-only" htmlFor="signup-email">Email</label>
-          <input id="signup-email" onChange={(event) => { setEmail(event.target.value); setSent(false); }} placeholder="you@example.com" required type="email" value={email} />
-          <label className="sr-only" htmlFor="signup-password">Password</label>
-          <input id="signup-password" minLength={8} onChange={(event) => { setPassword(event.target.value); setSent(false); }} placeholder="at least 8 characters" required type="password" value={password} />
-          <button type="submit" disabled={!email.trim() || password.length < 8}>create admin account</button>
+          <label className="sr-only" htmlFor="signup-email">{copy.auth_email_label}</label>
+          <input id="signup-email" onChange={(event) => { setEmail(event.target.value); setSent(false); }} placeholder={copy.auth_email_placeholder} required type="email" value={email} />
+          <label className="sr-only" htmlFor="signup-password">{copy.auth_password_label}</label>
+          <input id="signup-password" minLength={8} onChange={(event) => { setPassword(event.target.value); setSent(false); }} placeholder={copy.signup_password_placeholder} required type="password" value={password} />
+          <button type="submit" disabled={!email.trim() || password.length < 8}>{copy.signup_submit}</button>
           {error && <span className="composer-error" role="alert">{error}</span>}
-          {sent && <span role="status">check your inbox to confirm your admin account.</span>}
-          <GoogleAuthButton />
-          <Link href="/login">already have an account? sign in</Link>
+          {sent && <span role="status">{copy.signup_sent}</span>}
+          <GoogleAuthButton label={copy.auth_google} />
+          <Link href="/login">{copy.signup_login_link}</Link>
         </form>
       </section>
     </main>

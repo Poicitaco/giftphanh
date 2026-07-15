@@ -66,6 +66,13 @@ Giftphanh là một website quà tặng cộng tác: một người tạo lọ, 
 - Kiểm tra desktop, mobile, bàn phím, reduced motion, phân quyền và các trạng thái rỗng/lỗi.
 - Chạy `npm run check`, kiểm thử luồng thật, sau đó mới đẩy GitHub và Vercel.
 
+### 7. Cài đặt chữ toàn website — hoàn thành
+
+- Thêm `/admin/settings` để chỉnh toàn bộ chữ giao diện cố định theo từng nhóm trang.
+- Không đưa tên người nhận, tên lọ hoặc nội dung thư của người dùng vào cài đặt chung.
+- Chỉ `itentad.work@gmail.com` được thấy trang, gọi server action và cập nhật bảng `site_settings` qua RLS.
+- Website luôn có bộ chữ mặc định nếu cấu hình chưa tồn tại hoặc Supabase tạm thời lỗi.
+
 ## Component dự kiến
 
 - `AmbientStarField`: nền sao dùng lại theo nhiều mức độ.

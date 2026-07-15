@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { RecipientUnlockForm } from "@/components/recipient-unlock-form";
 import { RecipientJar, type Star } from "@/components/recipient-jar";
 import { AmbientStarField } from "@/components/ambient-star-field";
+import { getSiteCopy } from "@/lib/site-copy-server";
 
 export const dynamic = "force-dynamic";
 export default async function RecipientPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -14,6 +15,7 @@ export default async function RecipientPage({ params }: { params: Promise<{ slug
   if (error) console.error("get_public_jar failed", { code: error.code, message: error.message });
   const jar = data?.[0];
   if (!jar) notFound();
+  const copy = await getSiteCopy();
   const sessionToken = (await cookies()).get(`jar-recipient-${slug}`)?.value;
   let stars: Star[] | null = null;
   if (sessionToken) {
@@ -21,5 +23,5 @@ export default async function RecipientPage({ params }: { params: Promise<{ slug
     if (!result.error) stars = (result.data ?? []) as Star[];
   }
   if (stars) return <RecipientJar slug={slug} recipientName={jar.recipient_name} stars={stars} />;
-  return <main className="flow-page scene"><AmbientStarField full /><Link className="composer-back" href="/">← home</Link><header className="flow-heading"><p>a little jar for</p><h1>{jar.recipient_name}</h1><h2>{jar.title}</h2>{jar.intro && <p>{jar.intro}</p>}</header><RecipientUnlockForm slug={slug} hint={jar.recipient_passcode_hint} opened={jar.status === "opened"} /></main>;
+  return <main className="flow-page scene"><AmbientStarField full /><Link className="composer-back" href="/">← {copy.recipient_back}</Link><header className="flow-heading"><p>{copy.recipient_for}</p><h1>{jar.recipient_name}</h1><h2>{jar.title}</h2>{jar.intro && <p>{jar.intro}</p>}</header><RecipientUnlockForm slug={slug} hint={jar.recipient_passcode_hint} opened={jar.status === "opened"} /></main>;
 }

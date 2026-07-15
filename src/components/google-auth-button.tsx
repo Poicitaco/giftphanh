@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export function GoogleAuthButton() {
+export function GoogleAuthButton({ label }: { label: string }) {
   const [error, setError] = useState("");
 
   async function continueWithGoogle() {
@@ -18,7 +18,7 @@ export function GoogleAuthButton() {
   return (
     <>
       <button className="google-auth-button" onClick={continueWithGoogle} type="button">
-        continue with Google
+        {label}
       </button>
       {error && <span className="composer-error" role="alert">{error}</span>}
     </>

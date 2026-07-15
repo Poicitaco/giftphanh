@@ -289,3 +289,16 @@ button, a { cursor: pointer; }
   .gift-ambient-stars { display:none; }
   .landing-star,.landing-content,.recipient-jar,.recipient-star,.recipient-star img,.recipient-jar-glass,.recipient-jar .jar-paper-backdrop,.flow-paper::before,.auth-paper::before,.jar-create-form::before { animation:none!important; opacity:1; }
 }
+
+/* Super-admin copy settings */
+.settings-shell { width:min(100%,58rem); }
+.settings-success { position:relative; z-index:2; padding:.85rem 1rem; color:#3e6744; background:rgba(239,248,235,.82); }
+.settings-form { position:relative; z-index:2; display:grid; gap:1.2rem; }
+.settings-form fieldset { display:grid; gap:.8rem; margin:0; padding:1.5rem; border:1px solid rgba(61,66,57,.14); background:rgba(255,251,242,.86); }
+.settings-form legend { padding:0 .5rem; color:var(--blue); font:500 1.35rem var(--font-cormorant),serif; }
+.settings-form label { display:grid; gap:.35rem; color:#555f55; font-size:.7rem; }
+.settings-form label span { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.5rem; }
+.settings-form code { color:#899087; font-size:.58rem; }
+.settings-form input,.settings-form textarea { width:100%; border:1px solid rgba(61,66,57,.16); border-radius:.35rem; padding:.7rem .8rem; color:#293229; background:#fffdf8; font-size:.76rem; line-height:1.55; }
+.settings-form textarea { resize:vertical; }
+.settings-form .flow-submit { position:sticky; z-index:3; bottom:1rem; background:#fff; box-shadow:0 8px 22px rgba(77,62,45,.12); }
