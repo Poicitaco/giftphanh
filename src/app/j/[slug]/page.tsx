@@ -10,7 +10,8 @@ export const dynamic = "force-dynamic";
 export default async function RecipientPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data } = await supabase.rpc("get_public_jar", { p_slug: slug });
+  const { data, error } = await supabase.rpc("get_public_jar", { p_slug: slug });
+  if (error) console.error("get_public_jar failed", { code: error.code, message: error.message });
   const jar = data?.[0];
   if (!jar) notFound();
   const sessionToken = (await cookies()).get(`jar-recipient-${slug}`)?.value;
