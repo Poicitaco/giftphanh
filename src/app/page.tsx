@@ -1,9 +1,5 @@
-import { WelcomeScene } from "@/components/welcome-scene";
-import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function Home() {
-  const { data } = await (await createClient()).auth.getClaims();
-  return <WelcomeScene authenticated={Boolean(data?.claims)} />;
+export default function Home() {
+  redirect("/welcome");
 }

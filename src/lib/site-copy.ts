@@ -89,7 +89,11 @@ export const defaultSiteCopy = {
   create_passcode_placeholder: "Ít nhất 6 ký tự",
   create_hint_label: "Gợi ý mật mã",
   create_hint_placeholder: "Ngày đầu tiên chúng ta gặp nhau — DDMMYYYY",
-  create_open_at_label: "Ngày giờ dự kiến mở (không bắt buộc)",
+  create_open_at_label: "Ngày giờ mở (không bắt buộc)",
+  create_open_manual: "Mở thủ công (tự bạn bấm mở)",
+  create_open_scheduled: "Hẹn ngày giờ mở",
+  create_open_date: "Ngày",
+  create_open_time: "Giờ",
   create_submit: "tạo chiếc lọ này",
   create_pending: "đang gấp chiếc lọ…",
 
@@ -171,6 +175,10 @@ export const defaultSiteCopy = {
   recipient_anonymous: "ẩn danh",
   recipient_fold_back: "gấp lại vào lọ",
   recipient_dialog_label: "Lá thư đã mở",
+  recipient_view_all: "xem tất cả ngôi sao",
+  recipient_gallery_title: "tất cả ngôi sao trong lọ",
+  recipient_gallery_intro: "những ngôi sao đã mở sẽ hiện nội dung ở đây.",
+  recipient_gallery_unopened: "ngôi sao chưa mở",
 
   gallery_back: "quay lại viết thư",
   gallery_title: "những lá thư được chia sẻ",

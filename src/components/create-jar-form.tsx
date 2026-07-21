@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { createJar, type CreateJarState } from "@/app/create/actions";
 import { useSiteCopy } from "@/components/site-copy-provider";
+import { PaperDatePicker } from "@/components/paper-date-picker";
 
 const initialState: CreateJarState = { error: "" };
 
@@ -28,7 +29,7 @@ export function CreateJarForm() {
       <input id="jar-hint" maxLength={300} name="hint" placeholder={copy.create_hint_placeholder} />
 
       <label htmlFor="jar-open-at">{copy.create_open_at_label}</label>
-      <input id="jar-open-at" name="openAt" type="datetime-local" />
+      <PaperDatePicker id="jar-open-at" name="openAt" />
 
       {state.error && <p className="composer-error" role="alert">{state.error}</p>}
       <button disabled={pending} type="submit">{pending ? copy.create_pending : copy.create_submit}</button>

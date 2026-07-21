@@ -45,19 +45,23 @@ Giftphanh là một website quà tặng cộng tác: một người tạo lọ, 
 
 Đã hoàn thiện form tờ thư, tiếng Việt vui, mobile, bộ đếm 10.000 ký tự và ba kiểu chữ có xem trước. Ảnh riêng tư được tách sang bước Storage để thiết kế đúng quyền truy cập. Migration `202607140004_memory_fonts.sql` đã được áp dụng và kiểm tra trên Supabase ngày 15/07/2026.
 
-### 4. Trải nghiệm người nhận
+### 4. Trải nghiệm người nhận — hoàn thành
 
 - Sau khi mở khóa, chỉ hiển thị tên người nhận, chiếc lọ và nút xem tất cả ngôi sao.
 - Bấm từng ngôi sao để mở thư; lúc đó mới hiện nội dung, tên người gửi và ngày.
 - Thêm màn xem tất cả ngôi sao được bảo vệ bằng phiên người nhận.
 - Sao đã đọc vẫn mở lại được và có trạng thái thị giác nhẹ hơn.
 
-### 5. Tạo lọ, lịch và quản trị
+Đã hoàn thiện màn hình `/j/[slug]/all` dành cho người nhận, tạo migration thêm API bảo mật giúp ẩn thông tin thư chưa mở, và thêm CSS đánh dấu rõ các sao đã xem.
+
+### 5. Tạo lọ, lịch và quản trị — hoàn thành
 
 - Thay bộ chọn `datetime-local` thô bằng bộ chọn ngày mở theo phong cách giấy.
 - Cung cấp lựa chọn mở thủ công hoặc hẹn ngày giờ.
 - Việt hóa trang tạo lọ, quản trị, duyệt thư và trạng thái trống/lỗi.
 - Giữ hai liên kết người viết/người nhận tách biệt và dễ sao chép.
+
+Đã hoàn thiện component PaperDatePicker có 2 tuỳ chọn (thủ công / hẹn giờ), thay thế nội dung hardcode (như 'ẩn danh') trên giao diện admin.
 
 ### 6. Dữ liệu, QA và triển khai
 

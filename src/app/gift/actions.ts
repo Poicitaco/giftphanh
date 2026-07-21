@@ -32,44 +32,30 @@ export async function submitLetter(_: FormState, data: FormData): Promise<FormSt
   const copy = await getSiteCopy();
   const slug = read(data, "slug");
   const content = read(data, "content");
-  const isAnonymous = false;
-  const visibility = "contributors";
+  const senderName = read(data, "senderName");
+  const editPasscode = read(data, "editPasscode");
+  const isAnonymous = data.get("isAnonymous") === "on";
+  const visibility = data.get("visibility") === "contributors" ? "contributors" : "private";
   const color = read(data, "color") || "sky";
   const fontKey = readFont(data);
-  const recipientPassword = read(data, "recipientPassword");
-  const recipientPasswordHint = read(data, "recipientPasswordHint");
-  const photoUrl = read(data, "photoUrl") || null;
-  // Mat ma chinh sua la tuy chon - tu dong sinh neu trong
-  const editPasscode = read(data, "editPasscode") || `auto-${crypto.randomUUID().replace(/-/g, "")}`;
-  
   if (!/^[a-z0-9][a-z0-9-]{2,63}$/.test(slug)) return { error: copy.error_invalid_slug };
   if (!content || content.length > 10000) return { error: copy.error_letter_length };
+  if (!isAnonymous && (!senderName || senderName.length > 100)) return { error: copy.error_sender_required };
+  if (editPasscode.length < 6 || editPasscode.length > 72) return { error: copy.error_edit_passcode_length };
   if (!fontKey) return { error: copy.error_font_invalid };
 
   const store = await cookies();
   const name = cookieName("contributor", slug);
   const contributorToken = store.get(name)?.value || token();
   const supabase = await createClient();
-  
-  const { data: authData } = await supabase.auth.getUser();
-  if (!authData?.user) return { error: "Vui lòng đăng nhập." };
-  
-  const { data: profile } = await supabase.from("profiles").select("display_name").eq("id", authData.user.id).single();
-  const senderName = profile?.display_name || "Khách";
-  
-  if (!senderName || senderName.length > 100) return { error: copy.error_sender_required };
-
   const { data: memoryId, error } = await supabase.rpc("submit_memory", {
     p_slug: slug, p_sender_name: senderName || null, p_is_anonymous: isAnonymous,
     p_content: content, p_visibility: visibility, p_edit_passcode: editPasscode,
     p_contributor_token: contributorToken, p_color: color, p_font_key: fontKey,
     p_rotation: Math.floor(Math.random() * 13) - 6,
-    p_recipient_password: recipientPassword || null,
-    p_recipient_password_hint: recipientPasswordHint || null,
-    p_photo_url: photoUrl || null,
   });
   if (error || !memoryId) return { error: copy.error_letter_submit };
-  store.set(name, contributorToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: `/write`, maxAge: 60 * 60 * 24 * 365 });
+  store.set(name, contributorToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: `/j/${slug}`, maxAge: 60 * 60 * 24 * 365 });
   return { error: "", success: copy.success_letter_submit, memoryId };
 }
 
@@ -122,23 +108,18 @@ export async function unlockRecipient(_: FormState, data: FormData): Promise<For
   if (result === "not_opened") return { error: copy.error_recipient_not_opened };
   if (result === "locked") return { error: copy.error_recipient_locked };
   if (result !== "ok") return { error: copy.error_recipient_wrong_passcode };
-  store.set(name, sessionToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: `/gift`, maxAge: 60 * 60 * 24 * 7 });
-  redirect(`/gift`);
+  store.set(name, sessionToken, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: `/j/${slug}`, maxAge: 60 * 60 * 24 * 7 });
+  redirect(`/j/${slug}`);
 }
 
-export async function openMemory(slug: string, memoryId: string, starPassword?: string): Promise<{ error?: string; memory?: OpenedMemory }> {
+export async function openMemory(slug: string, memoryId: string): Promise<{ error?: string; memory?: OpenedMemory }> {
   const copy = await getSiteCopy();
   if (!/^[a-z0-9][a-z0-9-]{2,63}$/.test(slug)) return { error: copy.error_invalid_slug };
   const store = await cookies();
   const sessionToken = store.get(cookieName("recipient", slug))?.value;
   if (!sessionToken) return { error: copy.error_recipient_unlock };
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("open_recipient_memory", { 
-    p_slug: slug, 
-    p_session_token: sessionToken, 
-    p_memory_id: memoryId,
-    p_star_password: starPassword || null
-  });
+  const { data, error } = await supabase.rpc("open_recipient_memory", { p_slug: slug, p_session_token: sessionToken, p_memory_id: memoryId });
   if (error || !data?.[0]) return { error: copy.error_star_open };
   return { memory: data[0] as OpenedMemory };
 }

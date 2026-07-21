@@ -81,7 +81,7 @@ export default async function JarAdminPage({ params }: { params: Promise<{ id: s
           {memories.map((memory) => (
             <article key={memory.id}>
               <span>{moderationLabel[memory.moderation_status] ?? memory.moderation_status} · {visibilityLabel[memory.visibility] ?? memory.visibility}</span>
-              <h3>{memory.is_anonymous ? "ẩn danh" : memory.sender_name}</h3>
+              <h3>{memory.is_anonymous ? copy.recipient_anonymous : memory.sender_name}</h3>
               <p>{memory.content}</p>
               <div>
                 <form action={setMemoryStatus.bind(null, id, memory.id, "approved")}><button>{copy.admin_approve}</button></form>
